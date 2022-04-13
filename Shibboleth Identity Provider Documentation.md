@@ -2,9 +2,10 @@
 # Shibboleth Identity Provider 4
 
 - [Προετοιμασία συστήματος](#Προετοιμασία)
-- [Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war]()
-- [Metadata providers]()
-- [Παραμετροποίηση αρχείων καταγραφής (Logging)]()
+- [Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war](#εγκατάσταση-shibboleth-identity-provider---δημιουργία-του-shibboleth-idpwar)
+- [Metadata providers](#metadata-providers)
+- [Παραμετροποίηση αρχείων καταγραφής](#παραμετροποίηση-αρχείων-καταγραφής)
+- [Παραμετροποίηση επικοινωνίας με υποδομή LDAP/AD](#παραμετροποίηση-επικοινωνίας-με-ldapad)
 - [Παραμετροποίηση Βάσης]()
 - [Παραμετροποίηση JPA Server Side Storage]()
 - [Παραμετροποίηση PersistentId]()
@@ -64,10 +65,12 @@ update-alternatives --config java
 
 **Παραμετροποίηση openLDAP (εάν απαιτείται)**
 
-Θα χρειαστεί να ρυθμίσετε τον openLDAP server σας ώστε να γνωρίζει τα 2
+Σε αυτό το κομμάτι περιγράφεται η ρύθμιση του openLDAP server σας ώστε να γνωρίζει τα 2
 schemas που χρησιμοποιούνται στην Ομοσπονδία ΔΗΛΟΣ του ΕΔYTE και στο
 eduGAIN, το eduPerson και το schac.
-
+Σε περίπτωση που δεν έχει προηγηθεί αυτή η ενέργεια στο παρελθόν πατήστε 
+<details>
+<summary>εδώ</summary>
 Κατεβάστε το schac schema από [εδώ](https://wiki.refeds.org/download/attachments/44957731/schac-20150413-1.5.0.schema.txt?version=1&modificationDate=1429052013839&api=v2)
 
 και το eduPerson αντίστοιχα από [εδώ](https://spaces.internet2.edu/download/attachments/2309/2xOpenLdapEduPerson-201602.zip?version=1&modificationDate=1469471690870&api=v2)
@@ -149,7 +152,7 @@ mv /tmp/eduperson/cn\=config/cn\=schema/cn\=\{0\}eduperson.ldif /tmp/eduperson/e
 ```
 ldapadd -Q -Y EXTERNAL -H ldapi:/// -f /tmp/eduperson/eduperson.ldif
 ```
-
+</details>
 
 
 **Εγκατάσταση και παραμετροποίηση Tomcat 9 Servlet Container**
@@ -191,10 +194,10 @@ ReadWritePaths=/opt/shibboleth-idp/metadata/
 /etc/tomcat9/server.xml
 ```xml
 #/etc/tomcat9/server.xml
-   <!-- ... -->
+   <!-- Αναζητήστε το connector για την πόρτα 8009 και επεξεργαστείτε το  -->
   <Service name="Catalina">
-    <!-- ... -->
-    <!-- non-SSL/TLS HTTP/1.1 Connector on port 8080 abschalten -->
+    <!-- Απενεργοποίηση του 8080 -->
+    <!-- non-SSL/TLS HTTP/1.1 Connector on port 8080 -->
     <!-- <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" /> -->
@@ -360,7 +363,7 @@ date -R
 ```
 dpkg-reconfigure tzdata
 ```
-**Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war**
+## Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war
 
 Κατεβάστε το αρχείο εγκατάστασης καθώς και το αρχείο με το sha256 hash του αρχείου εγκατάστασης από το https://shibboleth.net/downloads/identity-provider/latest/
 
@@ -461,20 +464,23 @@ chmod -R g+r /opt/shibboleth-idp/conf /opt/shibboleth-idp/credentials
 ```
 chown $( getent passwd | grep ^tomcat | cut -d ":" -f1 ):$( getent group | grep ^tomcat | cut -d ":" -f1 ) /opt/shibboleth-idp/logs /opt/shibboleth-idp/metadata
 ```
-Επανεκκίνηση του Tomcat9 και πρώτη δοκιμή
+**Επανεκκίνηση του Tomcat9 και πρώτη δοκιμή**
 
 Προτείνεται μαζί με την επανεκκίνηση να παρακολουθήσετε και τα σχετικά logs.
-
+```
 service tomcat9 restart | tail -f logs/idp-process.log
-και στην συνέχεια Εκτελέστε ώστε να δείτε την κατάσταση του Identity Provider
-
+```
+και στην συνέχεια Εκτελέστε το παρακάτω ώστε να δείτε την κατάσταση του Identity Provider
+```
 curl https://hostname/idp/status
+```
 
 **Προετοιμασία IdP Metadata**
 
 Μπορείτε να επεξεργαστείτε το αρχείο /opt/shibboleth-idp/idp-metadata.xml ώστε να συμφωνεί με τις απαιτήσεις τις ομοσπονδίας και της συνομοσπονδίας eduGAIN. 
 Παραθέτουμε ελάχιστο παράδειγμα που προσφέρει την αναγκαία λειτουργικότητα.
 ```xml
+<!-- Το παρακάτω xml είναι παράδειγμα οι δικές σας τιμές θα διαφέρουν από αυτές-->
 <?xml version="1.0" encoding="utf-8"?>
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui" xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" entityID="https://idp.admin.grnet.gr/idp/shibboleth">
   <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -551,7 +557,7 @@ curl https://hostname/idp/status
 ```
 
 
-**Metadata providers**
+## Metadata providers
 
 Στο αρχείο metadata-providers.xml, ορίζονται οι πηγές από τις οποίες θα διαβάζει και θα εμπιστεύεται metadata ο ΙdP. Η Ομοσπονδία ΔΗΛΟΣ του ΕΔΕΤ παρέχει metadata aggregates για τα Entities της Ομοσπονδίας και για τους SP που δημοσιεύονται στο eduGAIN, αν ο Identity Provider σας συμμετέχει στο eduGAIN.
 Στο αρχείο metadata-providers.xml θα πρέπει να ορίσετε τα απαραίτητα <MetadataProvider /> elements έτσι ώστε:
@@ -632,24 +638,28 @@ metadata-providers.xml
 </MetadataProvider>
 ```
 
-**Παραμετροποίηση αρχείων καταγραφής (Logging)**
+## Παραμετροποίηση αρχείων καταγραφής
 Στο αρχείο /opt/shibboleth-idp/conf/logback.xml παραμετροποιούνται τα επίπεδα των Loggers που χρησιμοποιεί ο Identity Provider. Επιγραμματικά, τα σημαντικότερα από αυτά και οι τιμές που προτείνονται:
 ```xml
 <variable name="idp.loglevel.idp" value="INFO" />` : Μηνύματα σχετικά με τον IdP. Χρησιμο να γίνει DEBUG για οποιαδήποτε προσπάθεια troubleshooting.
-xml:`<variable name="idp.loglevel.ldap" value="WARN" />` : Mηνύματα σχετικα με την επικοινωνία με τον LDAP server. Χρήσιμο να γίνει DEBUG σε περιπτώσεις προβλημάτων αυθεντικοποίησης.
-xml:`<variable name="idp.loglevel.messages" value="INFO" />` : SAML μηνύματα που λαμβάνει και στέλνει ο IdP.
-xml:`<variable name="idp.loglevel.encryption" value="INFO" />` : Στο DEBUG level εμφανίζει στο idp-process.log τα SAML Assertions unencrypted. Πολύ χρήσιμο για debugging οποιουδήποτε προβλήματος καθώς μπορείτε να δείτε ακριβως το Assertion που στεέλνεται σε κάθε IdP.
-xml:`<variable name="idp.loglevel.opensaml" value="INFO" />` : Μηνύματα από την βιβλιοθήκη OpenSAML.
+
+<variable name="idp.loglevel.ldap" value="WARN" />` : Mηνύματα σχετικα με την επικοινωνία με τον LDAP server. Χρήσιμο να γίνει DEBUG σε περιπτώσεις προβλημάτων αυθεντικοποίησης.
+
+<variable name="idp.loglevel.messages" value="INFO" />` : SAML μηνύματα που λαμβάνει και στέλνει ο IdP.
+
+<variable name="idp.loglevel.encryption" value="INFO" />` : Στο DEBUG level εμφανίζει στο idp-process.log τα SAML Assertions unencrypted. Πολύ χρήσιμο για debugging οποιουδήποτε προβλήματος καθώς μπορείτε να δείτε ακριβως το Assertion που στεέλνεται σε κάθε IdP.
+
+<variable name="idp.loglevel.opensaml" value="INFO" />` : Μηνύματα από την βιβλιοθήκη OpenSAML.
 ```
 Προτείνεται η παραμετροποίηση των παρακάτω τιμών:
 
 
 Για λόγους προστασίας των προσωπικών δεδομένων των χρηστών σας, προτείνεται να διατηρούνται logs για 7 μέρες. 
-```
+```xml
  <variable name ="idp.loghistory" value="7"/>
 ```
 Καταγραφή Client IP address για την αντιμετώπιση επιθέσεων τύπου brute force
-```
+```xml
 <appender name = "IDP_PROCESS" class = "...<File> ...
  
 <rollingPolicy class = "...
@@ -666,13 +676,13 @@ xml:`<variable name="idp.loglevel.opensaml" value="INFO" />` : Μηνύματα 
 ```
 
 
-**Παραμετροποίηση LDAP/AD**
+## Παραμετροποίηση επικοινωνίας με LDAP/AD
 
 Στο αρχείο ldap.properties θα πραγματοποιήσετε την απαιτούμενη παραμετροποίηση για να μπορέσει να
 χρησιμοποιήσει τον LDAP server σας ο Identity Provider για την αυθεντικοποίηση των χρηστών και την ανάκτηση των στοιχείων τους (attributes)
 
 /opt/shibboleth-idp/conf/ldap.properties
-```
+
 - idp.authn.LDAP.authenticator: Επιλέξτε ποιον τύπο Authenticator θα χρησιμοποιήσει Identity Provider. Οι επιλογές που έχετε για το πως θα γίνει η αυθεντικοποίηση είναι οι ακόλουθες:
 
 - *anonSearchAuthenticator*: Ο Identity Provider Θα επιχειρήσει να κάνει anonymous search για το userDN και στη συνέχεια θα κάνει απόπειρα bind εκ μέρους του χρήστη με DN, password
@@ -682,15 +692,14 @@ xml:`<variable name="idp.loglevel.opensaml" value="INFO" />` : Μηνύματα 
 - *directAuthenticator*: Σε περιπτώσεις όπου το DN των χρήστων έχει γνωστο format πχ CN=user_name,ou=accounts,dc=domain,dc=edu, δηλαδή οι χρήστες είναι όλοι κάτω από το ίδιο OU, δεν γίνεται search αλλά απευθέιας bind
  
 - *adAuthenticator* : Παραμετροποίηση που αφορά τη χρήση Active Directory.
- 
-Οι ακόλουθες τιμές παραμετροποίησης αφορούν πρόταση της Δ.Ο. της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΕΤ για την χρήση anonymous search σε OpenLDAP server που υποστηρίζει STARTTLS.
- 
+
+
+Οι ακόλουθες τιμές παραμετροποίησης αφορούν πρόταση της Δ.Ο. της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΕΤ για την χρήση bind search σε OpenLDAP server που υποστηρίζει STARTTLS.
 - idp.authn.LDAP.authenticator : Ορίστε την τιμή *bindSearchAuthenticator*
- 
 - idp.authn.LDAP.ldapURL : Ορίστε την τιμή ως το ldap URL που αντιστοιχει στον host και τo port στο οποίο ακούει για συνδέσεις ο LDAP Server σας. (π.χ. ldap://ldap.grnet.gr:389)
- 
+
 - idp.authn.LDAP.useStartTLS : Ορίστε την τιμή σε *true*
- 
+
 - idp.authn.LDAP.useSSL : Ορίστε την τιμή σε *false*
  
 - idp.authn.LDAP.connectTimeout : Ορίστε την τιμή σε *3000*
@@ -717,26 +726,93 @@ xml:`<variable name="idp.loglevel.opensaml" value="INFO" />` : Μηνύματα 
  
 - idp.attribute.resolver.LDAP.searchFilter : Ορίστε την τιμή ώς *(uid=$requestContext.principalName)*
 
+Τέλος, για την διευκόλυνση σας, σας παραθέτουμε ένα παράδειγμα το οποίο μπορεί να εφαρμοστεί για OpenLDAP και AD 
+```xml
+# LDAP authentication (and possibly attribute resolver) configuration
+# Note, this doesn't apply to the use of JAAS authentication via LDAP
+
+## Authenticator strategy, either anonSearchAuthenticator, bindSearchAuthenticator, directAuthenticator, adAuthenticator
+idp.authn.LDAP.authenticator                   = bindSearchAuthenticator
+
+## Connection properties ##
+idp.authn.LDAP.ldapURL                          = ldap://localhost ή ldaurl:389
+idp.authn.LDAP.useStartTLS                     = false
+# Time in milliseconds that connects will block
+idp.authn.LDAP.connectTimeout                  = 3000
+# Time in milliseconds to wait for responses
+idp.authn.LDAP.responseTimeout                 = 3000
+# Connection strategy to use when multiple URLs are supplied, either ACTIVE_PASSIVE, ROUND_ROBIN, RANDOM
+#idp.authn.LDAP.connectionStrategy               = ACTIVE_PASSIVE
+
+## SSL configuration, either jvmTrust, certificateTrust, or keyStoreTrust
+#idp.authn.LDAP.sslConfig                       = certificateTrust
+## If using certificateTrust above, set to the trusted certificate's path
+#idp.authn.LDAP.trustCertificates                = %{idp.home}/credentials/ldap-server.crt
+## If using keyStoreTrust above, set to the truststore path
+#idp.authn.LDAP.trustStore                       = %{idp.home}/credentials/ldap-server.truststore
+
+## Return attributes during authentication
+idp.authn.LDAP.returnAttributes                 = passwordExpirationTime,loginGraceRemaining
+
+## DN resolution properties ##
+
+# Search DN resolution, used by anonSearchAuthenticator, bindSearchAuthenticator
+# for AD: CN=Users,DC=example,DC=org
+idp.authn.LDAP.baseDN                           = ou=People,dc=statusreporting,dc=vm,dc=grnet,dc=gr
+#idp.authn.LDAP.subtreeSearch                   = false
+idp.authn.LDAP.userFilter                       = (uid={user})
+# bind search configuration
+# for AD: idp.authn.LDAP.bindDN=adminuser@domain.com
+idp.authn.LDAP.bindDN                           = cn=testidis,dc=statusreporting,dc=vm,dc=grnet,dc=gr
+
+# Format DN resolution, used by directAuthenticator, adAuthenticator
+# for AD use idp.authn.LDAP.dnFormat=%s@domain.com
+#idp.authn.LDAP.dnFormat                         = uid=%s,ou=people,dc=example,dc=org
+
+# pool passivator, either none, bind or anonymousBind
+#idp.authn.LDAP.bindPoolPassivator                  = none
+
+# LDAP attribute configuration, see attribute-resolver.xml
+# Note, this likely won't apply to the use of legacy V2 resolver configurations
+idp.attribute.resolver.LDAP.ldapURL             = %{idp.authn.LDAP.ldapURL}
+idp.attribute.resolver.LDAP.connectTimeout      = %{idp.authn.LDAP.connectTimeout:PT3S}
+idp.attribute.resolver.LDAP.responseTimeout     = %{idp.authn.LDAP.responseTimeout:PT3S}
+idp.attribute.resolver.LDAP.connectionStrategy  = %{idp.authn.LDAP.connectionStrategy:ACTIVE_PASSIVE}
+idp.attribute.resolver.LDAP.baseDN              = %{idp.authn.LDAP.baseDN}
+idp.attribute.resolver.LDAP.bindDN              = %{idp.authn.LDAP.bindDN}
+idp.attribute.resolver.LDAP.useStartTLS         = %{idp.authn.LDAP.useStartTLS:false}
+idp.attribute.resolver.LDAP.trustCertificates   = %{idp.authn.LDAP.trustCertificates:false}
+idp.attribute.resolver.LDAP.searchFilter        = (uid=$resolutionContext.principal)
+
+# LDAP pool configuration, used for both authn and DN resolution
+#idp.pool.LDAP.minSize                          = 3
+#idp.pool.LDAP.maxSize                          = 10
+#idp.pool.LDAP.validateOnCheckout               = false
+#idp.pool.LDAP.validatePeriodically             = true
+#idp.pool.LDAP.validatePeriod                   = PT5M
+#idp.pool.LDAP.validateDN                       =
+#idp.pool.LDAP.validateFilter                   = (objectClass=*)
+#idp.pool.LDAP.prunePeriod                      = PT5M
+#idp.pool.LDAP.idleTime                         = PT10M
+#idp.pool.LDAP.blockWaitTime                    = PT3S
+```
 
 
-ΜΕΧΡΙ ΕΔΩ we good
+Αν επιλεχθεί bindSearchautehnticator όπως στο παράδειγμα μας, θα χρειαστεί να ορίσετε τον κωδικό πρόσβαση για το bind. 
+Στην έκδοση 4 του Shibboleth Identity Provider, οι κωδικοί πρόσβαση αποθηκεύονται στο αρχείο
+```
+/opt/shibboleth-idp/credentials/secrets.properties
+```
+Προσθέστε την γράμμή 
+```
+idp.authn.LDAP.bindDNCredential              = topasswordtouCNpoykaneibind
+```
 
-
-
-
-
-Παραμετροποίηση attributes-resolver.xml
+## Παραμετροποίηση attributes-resolver.xml
 
 
 
 Το αρχείο αυτό περιέχει τους ορισμούς των attributes που μπορεί να έχει διαθέσιμα ο Identity Provider από το αποθετήριο χρηστών
-
-Προτείνεται να χρησιμοποιηθεί το αρχειο attribute-resolver-full.xml το οποίο υπάρχει στην εγκατάσταση σαν βάση με τις ακόλουθες αλλαγές:
-
-- Nα ενεργοποιηθούν (αφαιρεθούν τα σχόλια) μόνο οι ορισμοί attributes
-τα οποία υπάρχουν στον LDAP σας.
-
-- Να αφαιρεθούν τα AttributeEncoders με τύπο *xsi:type="SAML1String"*
 
 - Να προστεθούν οι απαραίτητοι ορισμοί για τα attributes του schac
 σχήματος που χρησιμοποιείτε και υπάρχουν στον LDAP server σας.
@@ -748,7 +824,7 @@ xml:`<variable name="idp.loglevel.opensaml" value="INFO" />` : Μηνύματα 
 Μια τυπική μορφή του αρχείου attribute-resolver.xml για έναν Identity Provider που συμμετέχει στην Ομοσπονδία ΔΗΛΟΣ του ΕΔΕΤ, παρουσιάζεται παρακάτω:
 
 
-
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is a rudimentary example. While it is semi-functional, it isn't very
@@ -826,16 +902,9 @@ list of possible components and their options.
         <InputDataConnector ref="myLDAP" attributeNames="displayName" />
     </AttributeDefinition>
  
-<!--
-   <AttributeDefinition id="mobile" xsi:type="Simple">
-       <InputDataConnector ref="myLDAP" attributeNames="mobile"/>
-   </AttributeDefinition>
--->
- 
     <AttributeDefinition id="eduPersonEntitlement" xsi:type="Simple">
         <InputDataConnector ref="myLDAP" attributeNames="eduPersonEntitlement"/>
     </AttributeDefinition>
- 
  
     <AttributeDefinition id="eduPersonAffiliaton" xsi:type="Simple">
         <InputDataConnector ref="myLDAP" attributeNames="eduPersonAffiliation"/>
@@ -921,6 +990,7 @@ list of possible components and their options.
     </DataConnector>
  
 </AttributeResolver>
+```
 Παραμετροποίηση Βάσης
 
 
