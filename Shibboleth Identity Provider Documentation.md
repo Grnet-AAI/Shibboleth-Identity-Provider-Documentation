@@ -1,25 +1,29 @@
 
 # Shibboleth Identity Provider 4
 
-- [Προετοιμασία συστήματος](#Προετοιμασία)
-- [Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war](#εγκατάσταση-shibboleth-identity-provider---δημιουργία-του-shibboleth-idpwar)
-- [Metadata providers](#metadata-providers)
-- [Παραμετροποίηση αρχείων καταγραφής](#παραμετροποίηση-αρχείων-καταγραφής)
-- [Παραμετροποίηση επικοινωνίας με υποδομή LDAP/AD](#παραμετροποίηση-επικοινωνίας-με-ldapad)
-- [Παραμετροποίηση Βάσης]()
-- [Παραμετροποίηση JPA Server Side Storage]()
-- [Παραμετροποίηση PersistentId]()
-- [User consent και session information]()
+- [Shibboleth Identity Provider 4](#shibboleth-identity-provider-4)
+  - [Γενικά](#γενικά)
+  - [Προετοιμασία συστήματος](#προετοιμασία-συστήματος)
+  - [Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war](#εγκατάσταση-shibboleth-identity-provider---δημιουργία-του-shibboleth-idpwar)
+  - [Metadata providers](#metadata-providers)
+  - [Παραμετροποίηση αρχείων καταγραφής](#παραμετροποίηση-αρχείων-καταγραφής)
+  - [Παραμετροποίηση επικοινωνίας με LDAP/AD](#παραμετροποίηση-επικοινωνίας-με-ldapad)
+  - [Παραμετροποίηση attribute-resolver.xml](#παραμετροποίηση-attribute-resolverxml)
+- [Παραμετροποίηση Βάσης](#παραμετροποίηση-βάσης)
+  - [Εγκατάσταση βάσης δεδομένων](#εγκατάσταση-βάσης-δεδομένων)
+- [Παραμετροποίηση JPA Server Side Storage](#παραμετροποίηση-jpa-server-side-storage)
+  - [Παραμετροποίηση PersistentId](#παραμετροποίηση-persistentid)
+- [User consent και session information](#user-consent-και-session-information)
 
 
 ## Γενικά
-Για την ένταξη ενός Φορέα στην Ομοσπονδία ΔΗΛΟΣ του ΕΔΕΤ απαιτείται η υλοποίηση ενός Παρόχου Ταυτότητας συμβατού με τα πρότυπα SAML 2.0 του οργανισμού OASIS. Προτείνεται ο [Shibboleth Identity Provider](https://shibboleth.net/products/identity-provider.html).
+Για την ένταξη ενός Φορέα στην Ομοσπονδία ΔΗΛΟΣ του ΕΔΥΤΕ απαιτείται η υλοποίηση ενός Παρόχου Ταυτότητας συμβατού με τα πρότυπα SAML 2.0 του οργανισμού OASIS. Προτείνεται ο [Shibboleth Identity Provider](https://shibboleth.net/products/identity-provider.html).
 Απαιτούμενη για τη λειτουργία του Shibboleth Identity Provider είναι η ύπαρξη του ακόλουθου λογισμικού
 
 * Java Runtime Environment (jre)
 * Java Servlet Container ( π.χ. Tomcat, Jetty)
 
-Ο Shibboleth Identity Provider εκμεταλλευόμενος τις cross-platform δυνατότητες της Java μπορεί να εγκατασταθεί τόσο σε λειτουργικό σύστημα Microsoft Windows όσο και σε λειτουργικό σύστημα Linux. Πρόταση της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΕΤ είναι ή χρήση λειτουργικού συστήματος Linux, και οι ακόλουθες οδηγίες είναι βασισμένες σε λειτουργικό σύστημα Debian 10.
+Ο Shibboleth Identity Provider εκμεταλλευόμενος τις cross-platform δυνατότητες της Java μπορεί να εγκατασταθεί τόσο σε λειτουργικό σύστημα Microsoft Windows όσο και σε λειτουργικό σύστημα Linux. Πρόταση της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΥΤΕ είναι ή χρήση λειτουργικού συστήματος Linux, και οι ακόλουθες οδηγίες είναι βασισμένες σε λειτουργικό σύστημα Debian 10.
 
 Προτείνεται ισχυρά η εγκατάσταση πακέτων συστήματος από το λειτουργικό σύστημα, καθώς το μη "πακεταρισμένο" λογισμικό έχει σημαντικά μεγαλύτερο κόστος συντήρησης.
 
@@ -349,7 +353,7 @@ service apache2 restart
 **Έλεγχος ώρας συστήματος**
 
 Η σωστή ώρα συστήματος είναι πολύ σημαντική στο SAML καθώς τα SAML μηνύματα έχουν περιορισμένη χρονική ισχύ (συνήθως της τάξης των μερικών λεπτών) και κατά συνέπεια ο λάθος χρονισμός ενός συστήματος ή η λάθος
-επιλογή ζώνης ώρας μπορεί να προκαλέσει σημαντικά προβλήματα στην επικοινωνία του Shibboleth Identity Provider με Service Providers που συμμετέχουν στην Ομοσπονδία ΔΗΛΟΣ του ΕΔΕΤ, ή το eduGAIN.
+επιλογή ζώνης ώρας μπορεί να προκαλέσει σημαντικά προβλήματα στην επικοινωνία του Shibboleth Identity Provider με Service Providers που συμμετέχουν στην Ομοσπονδία ΔΗΛΟΣ του ΕΔΥΤΕ, ή το eduGAIN.
 
 Επιβεβαιώστε ότι συνδέεστε σε κάποιους NTP servers με
 ```
@@ -454,7 +458,7 @@ cd /opt/shibboleth-idp/
 **Παραμετροποίηση Permissions**
 
 Ο χρήστης ως ο οποίος τρέχουν τα processes του Tomcat9 θα πρέπει να έχει δικαίωμα να διαβάσει τα αρχεία που περιέχονται στο /opt/shibboleth-idp/conf/ και στο /opt/shibboleth-idp/credentials/ και να μπορεί να διαβάζει και να γράφει στα directories /opt/shibboleth-idp/logs/ και /opt/shibboleth-idp/metadata/
-Η πρόταση της Δ.Ο. της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΕΤ είναι να γίνει group owner των παραπάνω directories το tomcat group και να αποδοθούν τα κατάλληλα permissions στο group αυτό όπως περιγράφεται παρακάτω:
+Η πρόταση της Δ.Ο. της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΥΤΕ είναι να γίνει group owner των παραπάνω directories το tomcat group και να αποδοθούν τα κατάλληλα permissions στο group αυτό όπως περιγράφεται παρακάτω:
 ```
 chgrp -R $( getent group | grep ^tomcat | cut -d ":" -f1 ) /opt/shibboleth-idp/conf /opt/shibboleth-idp/credentials
 ```
@@ -488,7 +492,7 @@ curl https://hostname/idp/status
       <shibmd:Scope regexp="false">grnet-hq.admin.grnet.gr</shibmd:Scope>
       <mdui:UIInfo>
         <mdui:DisplayName xml:lang="en">Greek Research and Technology Network - GRNET</mdui:DisplayName>
-        <mdui:DisplayName xml:lang="el">Εθνικό Δίκτυο Έρευνας και Τεχνολογίας - ΕΔΕΤ</mdui:DisplayName>
+        <mdui:DisplayName xml:lang="el">Εθνικό Δίκτυο Έρευνας και Τεχνολογίας - ΕΔΥΤΕ</mdui:DisplayName>
         <mdui:InformationURL xml:lang="en">http://www.grnet.gr/</mdui:InformationURL>
         <mdui:InformationURL xml:lang="el">http://www.grnet.gr/</mdui:InformationURL>
         <mdui:Logo  height="54" width="125">/path/to/urllogo</mdui:Logo>
@@ -531,9 +535,9 @@ curl https://hostname/idp/status
   </IDPSSODescriptor>
   <Organization>
     <OrganizationName xml:lang="en">Greek Research and Technology Network - GRNET</OrganizationName>
-    <OrganizationName xml:lang="el">Εθνικό Δίκτυο Έρευνας και Τεχνολογίας - ΕΔΕΤ</OrganizationName>
+    <OrganizationName xml:lang="el">Εθνικό Δίκτυο Έρευνας και Τεχνολογίας - ΕΔΥΤΕ</OrganizationName>
     <OrganizationDisplayName xml:lang="en">Greek Research and Technology Network - GRNET</OrganizationDisplayName>
-    <OrganizationDisplayName xml:lang="el">Εθνικό Δίκτυο Έρευνας και Τεχνολογίας - ΕΔΕΤ</OrganizationDisplayName>
+    <OrganizationDisplayName xml:lang="el">Εθνικό Δίκτυο Έρευνας και Τεχνολογίας - ΕΔΥΤΕ</OrganizationDisplayName>
     <OrganizationURL xml:lang="en">https://grnet.gr/</OrganizationURL>
     <OrganizationURL xml:lang="el">https://grnet.gr/</OrganizationURL>
   </Organization>
@@ -559,10 +563,10 @@ curl https://hostname/idp/status
 
 ## Metadata providers
 
-Στο αρχείο metadata-providers.xml, ορίζονται οι πηγές από τις οποίες θα διαβάζει και θα εμπιστεύεται metadata ο ΙdP. Η Ομοσπονδία ΔΗΛΟΣ του ΕΔΕΤ παρέχει metadata aggregates για τα Entities της Ομοσπονδίας και για τους SP που δημοσιεύονται στο eduGAIN, αν ο Identity Provider σας συμμετέχει στο eduGAIN.
+Στο αρχείο metadata-providers.xml, ορίζονται οι πηγές από τις οποίες θα διαβάζει και θα εμπιστεύεται metadata ο ΙdP. Η Ομοσπονδία ΔΗΛΟΣ του ΕΔΥΤΕ παρέχει metadata aggregates για τα Entities της Ομοσπονδίας και για τους SP που δημοσιεύονται στο eduGAIN, αν ο Identity Provider σας συμμετέχει στο eduGAIN.
 Στο αρχείο metadata-providers.xml θα πρέπει να ορίσετε τα απαραίτητα <MetadataProvider /> elements έτσι ώστε:
 
-Να καταναλώνονται τα metadata της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΕΤ από το
+Να καταναλώνονται τα metadata της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΥΤΕ από το
 <https://md.aai.grnet.gr/aggregates/grnet-metadata.xml>
 
 Σε περίπτωση που ο IDP σας συμμετέχει στο eduGAIN, να καταναλωνόνται
@@ -694,7 +698,7 @@ metadata-providers.xml
 - *adAuthenticator* : Παραμετροποίηση που αφορά τη χρήση Active Directory.
 
 
-Οι ακόλουθες τιμές παραμετροποίησης αφορούν πρόταση της Δ.Ο. της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΕΤ για την χρήση bind search σε OpenLDAP server που υποστηρίζει STARTTLS.
+Οι ακόλουθες τιμές παραμετροποίησης αφορούν πρόταση της Δ.Ο. της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΥΤΕ για την χρήση bind search σε OpenLDAP server που υποστηρίζει STARTTLS.
 - idp.authn.LDAP.authenticator : Ορίστε την τιμή *bindSearchAuthenticator*
 - idp.authn.LDAP.ldapURL : Ορίστε την τιμή ως το ldap URL που αντιστοιχει στον host και τo port στο οποίο ακούει για συνδέσεις ο LDAP Server σας. (π.χ. ldap://ldap.grnet.gr:389)
 
@@ -808,7 +812,7 @@ idp.attribute.resolver.LDAP.searchFilter        = (uid=$resolutionContext.princi
 idp.authn.LDAP.bindDNCredential              = topasswordtouCNpoykaneibind
 ```
 
-## Παραμετροποίηση attributes-resolver.xml
+## Παραμετροποίηση attribute-resolver.xml
 
 
 
@@ -821,7 +825,7 @@ idp.authn.LDAP.bindDNCredential              = topasswordtouCNpoykaneibind
 χρησιμοποιεί παραμετροποίηση που έχει γίνει ήδη στα αρχεία
 `idp.properties` και `ldap.properties`
 
-Μια τυπική μορφή του αρχείου attribute-resolver.xml για έναν Identity Provider που συμμετέχει στην Ομοσπονδία ΔΗΛΟΣ του ΕΔΕΤ, παρουσιάζεται παρακάτω:
+Μια τυπική μορφή του αρχείου attribute-resolver.xml για έναν Identity Provider που συμμετέχει στην Ομοσπονδία ΔΗΛΟΣ του ΕΔΥΤΕ, παρουσιάζεται παρακάτω:
 
 
 ```xml
@@ -881,7 +885,6 @@ list of possible components and their options.
         <InputDataConnector ref="myLDAP" attributeNames="mobile" />
     </AttributeDefinition>
  
- 
     <AttributeDefinition id="sn" xsi:type="Simple">
         <InputDataConnector ref="myLDAP" attributeNames="sn" />
     </AttributeDefinition>
@@ -925,7 +928,6 @@ list of possible components and their options.
     <AttributeDefinition id="schacHomeOrganization" xsi:type="Simple">
         <InputDataConnector ref="myLDAP" attributeNames="schacHomeOrganization"/>
     </AttributeDefinition>
- 
  
     <AttributeDefinition id = "schacPersonalUniqueCode" xsi:type ="Template">
       <InputDataConnector ref="myLDAP" attributeNames="schacPersonalUniqueCode" />
@@ -980,7 +982,7 @@ list of possible components and their options.
             ]]>
         </FilterTemplate>
     </DataConnector>
- 
+ <!--
     <DataConnector id="StoredId"
         xsi:type="StoredId"
         generatedAttributeID="persistentId"
@@ -988,28 +990,49 @@ list of possible components and their options.
         <InputAttributeDefinition ref="%{idp.persistentId.sourceAttribute}" />
         <BeanManagedConnection>shibboleth.MySQLDataSource</BeanManagedConnection>
     </DataConnector>
- 
+ -->
 </AttributeResolver>
 ```
-Παραμετροποίηση Βάσης
+# Παραμετροποίηση Βάσης
 
+## Εγκατάσταση βάσης δεδομένων
+Εγκατάσταση βάσης δεδομένων και των απαραίτητων πακέτων για την επικοινωνία IdP και βάσης δεδομένων
+```
+root@idp:~# apt install mariadb-server mariadb-client libmariadb-java
+```
+
+```
+root@idp:~# ln -s /usr/share/java/mariadb-java-client.jar /var/lib/tomcat9/lib/mariadb-java-client.jar
+```
+
+Επανεκίνηση tomcat για την ενεργοποίηση των νέων ρυθμίσεων:
+```
+root@idp:~# systemctl restart tomcat9
+```
 
 Συνδεθείτε στην βάση σαν χρήστης με τα κατάλληλα δικαιώματα, και στη
 συνέχεια
 
 Δημιουργείστε το instance της βάσης που θα χρησιμοποιήσει ο
 Shibboleth Identity Provider
+```
 mysql> CREATE DATABASE shibboleth;
+```
 Δημιουργείστε ένα χρήστη με τα κατάλληλα credentials που θα
 χρησιμοποιεί ο Shibboleth Identity Provider ώστε να διαβάζει και να
 γράφει στην βάση. Αντικαταστήστε το *password* με έναν ισχυρό κωδικό
 της επιλογής σας.
+```
 mysql> CREATE USER 'shibboleth'@'localhost' IDENTIFIED BY 'password';
+```
 Δώστε στον χρήστη που δημιουργήσατε τα κατάλληλα privileges
+```
 mysql> GRANT ALL PRIVILEGES ON shibboleth . * TO 'shibboleth'@'localhost';
 mysql> FLUSH PRIVILEGES;
+```
 Δημιουργείστε τον πίνακα που θα χρησιμοποιηθεί για το persistent
 SAML2 NameID, όπως ορίζεται παρακάτω
+```
 mysql> use shibboleth
 mysql> CREATE TABLE shibpid (
 localEntity VARCHAR(255) NOT NULL,
@@ -1022,8 +1045,11 @@ creationDate TIMESTAMP NOT NULL,
 deactivationDate TIMESTAMP NULL,
 PRIMARY KEY (localEntity, peerEntity, persistentId)
 );
+```
+
 Δημιουργείστε τον πίνακα που θα χρησιμοποιηθεί για το server side
 storage του Shibboleth Identity Provider, όπως ορίζεται παρακάτω:
+```
 mysql> use shibboleth
 mysql> CREATE TABLE StorageRecords (
 context varchar(255) NOT NULL,
@@ -1033,13 +1059,13 @@ value longtext NOT NULL,
 version bigint(20) NOT NULL,
 PRIMARY KEY (context,id)
 );
+```
 
-
-Παραμετροποίηση JPA Server Side Storage
+# Παραμετροποίηση JPA Server Side Storage
 Στην ενότητα αυτή περιγράφεται η παραμετροποίηση της επικοινωνίας του Shibboleth Identity Provider με την βάση δεδομένων που χρησιμοποιείται για την αποθήκευση δεδομένων σχετικών με τα Sessions, τα NameIDs των χρηστών κ.α.
 
 Στο  /opt/shibboleth-idp/conf/global.xml είναι απαραίτητη η προσθήκη beans για την επικοινωνία με την βάση δεδομένων
-
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -1050,17 +1076,17 @@ PRIMARY KEY (context,id)
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
-  
+ 
        default-init-method="initialize"
        default-destroy-method="destroy">
- 
+
     <!-- Use this file to define any custom beans needed globally. -->
- 
-    <!-- The following values ​​are default values:
+
+    <!-- The following values are default values:
          p:maxActive="100"
          p:maxIdle="100"
-         ​It may be necessary to adjust these values ​​depending on the load on your IdP,
-         ​as well as the configuration of your MySQL Servers. -->
+        It may be necessary to adjust these values depending on the load on your IdP, 
+        as well as the configuration of your MySQL Servers. -->
         <bean id="shibboleth.MySQLDataSource"
               class="%{mysql.class}"
               p:driverClassName="org.mariadb.jdbc.Driver"
@@ -1073,12 +1099,12 @@ PRIMARY KEY (context,id)
               p:maxIdle="100"
               p:validationQuery="select 1"
               p:validationQueryTimeout="5" />
- 
+
         <bean id="shibboleth.JPAStorageService"
               class="org.opensaml.storage.impl.JPAStorageService"
               p:cleanupInterval="%{idp.storage.cleanupInterval:PT10M}"
               c:factory-ref="shibboleth.JPAStorageService.EntityManagerFactory" />
- 
+
         <bean id="shibboleth.JPAStorageService.EntityManagerFactory"
               class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
             <property name="packagesToScan" value="org.opensaml.storage.impl"/>
@@ -1088,40 +1114,42 @@ PRIMARY KEY (context,id)
                 <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
             </property>
         </bean>
- 
+
         <bean id="shibboleth.JPAStorageService.JPAVendorAdapter"
               class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
               p:generateDdl="true"
               p:database="MYSQL"
               p:databasePlatform="org.hibernate.dialect.MySQL5Dialect" />
- 
- 
-</beans>
 
+
+</beans>
+```
 
 Αποθήκευση των διαπιστευτηρίων για την βάση δεδομένων. 
 
 Στο αρχείο /opt/shibboleth-idp/conf/idp.properties όπως ορίσετε:
-
+```
 # ...
 mysql.class    = org.apache.tomcat.jdbc.pool.DataSource
 mysql.url      = jdbc:mysql://localhost:3306/shibboleth
 mysql.username = shibboleth
 # ...
+```
 Και στο αρχείο /credentials/secrets.properties
-
+```
 mysql.password = topassword που ορίσατε στο βήμα CREATE USER 'shibboleth'@'localhost' IDENTIFIED BY 'password'; της παραμετροποίησης της βάσης
+```
 Στην συνέχεια Επανεκκινήστε το Tomcat για να βεβαιωθείτε ότι μπορεί να διαβάσει το global.xml
-
-
-
+```
 root@idp:~# systemctl restart tomcat9
-Παραμετροποίηση PersistentId
+```
+## Παραμετροποίηση PersistentId
+
 Η παραμετροποίηση για την απελευθέρωση του persistentId γίνεται σε πολλά αρχεία. Παράγεται από κάποιο υπάρχον attribute του χρήστη και μοα τυχαία τιμή που χρησιμοποιείται σαν salt στο hashing function που υπολογίζει την τιμή του NameID.
 
 Στο αρχείο opt/shibboleth-idp/conf/saml-nameid.properties θα ορίστεί το πηγαίο attribute και ότι θα αποθηκεύεται στην βάση δεδομένων.
 Αν Επιλέξετε το π.χ. το  uid για πηγαίο attribute ορίστε το παρακάτω
-
+```
 idp.persistentId.sourceAttribute  = uid
 # idp.persistentId.useUnfilteredAttributes = true
   
@@ -1129,12 +1157,14 @@ idp.persistentId.sourceAttribute  = uid
 idp.persistentId.generator  = shibboleth.StoredPersistentIdGenerator
 # For basic use, set this to a JDBC DataSource bean name:
 idp.persistentId.dataSource  = shibboleth.MySQLDataSource
+```
 Στο αρχείο /opt/shibboleth-idp/credentials/secrets.properties αποθηκεύστε το hash σας
-
+```
 idp.persistentId.salt  = my-very-very-long-hash
 <!-- openssl rand -base64 64 π.χ. για την δημιουργία του-->
+```
 Στο αρχείο /opt/shibboleth-idp/conf/saml-nameid.xml θα ενεργοποιήσετε την παραγωγή του PersistentId. 
-
+```xml
 <!-- SAML 2 NameID Generation -->
 <util:list id="shibboleth.SAML2NameIDGenerators">
  
@@ -1151,16 +1181,19 @@ idp.persistentId.salt  = my-very-very-long-hash
     -->
  
 </util:list>
+```
 Στο αρχείο /opt/shibboleth-idp/conf/c14n/subject-c14n.xml ενεργοποιήστε το proccessing του persistentId
-
+```xml
 <!-- Handle a SAML 2 persistent ID, provided a stored strategy is in use. -->
 <ref bean="c14n/SAML2Persistent" />
+```
 Τα περισσότερα IdM's επιτρέπουν στους χρήστες να ολοκληρώσουν την είσοδο τους είτε με πεζά είτε με κεφαλαία γραμματα στο username τους. Αυτό μπορεί να προκαλέσει προβλήμτα στην βάση δεδομένων του IdP(case sensitive).
-Προτείνεται να Οοριστεί στο αρχείο ./conf/c14n/subject-c14n.properties  κανόνας για το process μόνο πεζών  χαρακτήρων.
-
+Προτείνεται να οριστεί στο αρχείο /conf/c14n/subject-c14n.properties  κανόνας για το process μόνο πεζών  χαρακτήρων.
+```
 idp.c14n.simple.lowercase  = true
+```
 Ενεργοποίηση του Data Connector στο /conf/attribute-resolver.xml
-
+```xml
 <DataConnector id="StoredId"
     xsi:type="StoredId"
     generatedAttributeID="persistentId"
@@ -1168,9 +1201,10 @@ idp.c14n.simple.lowercase  = true
     <InputAttributeDefinition ref="%{idp.persistentId.sourceAttribute}" />
     <BeanManagedConnection>shibboleth.MySQLDataSource</BeanManagedConnection>
 </DataConnector>
-User consent και session information
+```
+# User consent και session information
 ορίστε στο αρχείο /opt/shibboleth-idp/conf/idp.properties τα παρακάτω:
-
+```
 ...
  # Set to "shibboleth.StorageService" for server-side storage of user sessions
 idp.session.StorageService  = shibboleth.JPAStorageService
@@ -1196,8 +1230,9 @@ idp.consent.allowGlobal  = false
 # user has to confirm again. Since a local DB is now available instead of browser cookies
 , this useful feature should be activated!
 idp.consent.compareValues  = true
+```
 Στο αρχείο /conf/relying-party.xml
-
+```xml
 <beans ...>
   <!-- ... -->
   <bean id="shibboleth.DefaultRelyingParty" parent="RelyingParty">
@@ -1213,6 +1248,8 @@ idp.consent.compareValues  = true
   </bean>
   <!-- ... -->
 </beans>
+```
 Στην συνέχεια Επανεκκινήστε το Tomcat.
-
+```
 root@idp:/opt/shibboleth-idp# systemctl restart tomcat9
+```
