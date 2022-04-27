@@ -2,21 +2,24 @@
 # Shibboleth Identity Provider 4
 
 - [Shibboleth Identity Provider 4](#shibboleth-identity-provider-4)
-  - [Γενικά](#γενικά)
+- [Γενικά](#γενικά)
   - [Προετοιμασία συστήματος](#προετοιμασία-συστήματος)
-  - [Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war](#εγκατάσταση-shibboleth-identity-provider---δημιουργία-του-shibboleth-idpwar)
+- [Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war](#εγκατάσταση-shibboleth-identity-provider---δημιουργία-του-shibboleth-idpwar)
   - [Metadata providers](#metadata-providers)
   - [Παραμετροποίηση αρχείων καταγραφής](#παραμετροποίηση-αρχείων-καταγραφής)
   - [Παραμετροποίηση επικοινωνίας με LDAP/AD](#παραμετροποίηση-επικοινωνίας-με-ldapad)
   - [Παραμετροποίηση attribute-resolver.xml](#παραμετροποίηση-attribute-resolverxml)
+  - [Παραμετροποίηση απελευθέρωσης Attributes](#παραμετροποίηση-απελευθέρωσης-attributes)
 - [Παραμετροποίηση Βάσης](#παραμετροποίηση-βάσης)
   - [Εγκατάσταση βάσης δεδομένων](#εγκατάσταση-βάσης-δεδομένων)
 - [Παραμετροποίηση JPA Server Side Storage](#παραμετροποίηση-jpa-server-side-storage)
   - [Παραμετροποίηση PersistentId](#παραμετροποίηση-persistentid)
 - [User consent και session information](#user-consent-και-session-information)
+- [Παραμετροποίηση Single Log Out](#παραμετροποίηση-single-log-out)
+- [Παραμετροποίηση Λογότυπου φορέα](#παραμετροποίηση-λογότυπου-φορέα)
 
 
-## Γενικά
+# Γενικά
 Για την ένταξη ενός Φορέα στην Ομοσπονδία ΔΗΛΟΣ του ΕΔΥΤΕ απαιτείται η υλοποίηση ενός Παρόχου Ταυτότητας συμβατού με τα πρότυπα SAML 2.0 του οργανισμού OASIS. Προτείνεται ο [Shibboleth Identity Provider](https://shibboleth.net/products/identity-provider.html).
 Απαιτούμενη για τη λειτουργία του Shibboleth Identity Provider είναι η ύπαρξη του ακόλουθου λογισμικού
 
@@ -26,6 +29,7 @@
 Ο Shibboleth Identity Provider εκμεταλλευόμενος τις cross-platform δυνατότητες της Java μπορεί να εγκατασταθεί τόσο σε λειτουργικό σύστημα Microsoft Windows όσο και σε λειτουργικό σύστημα Linux. Πρόταση της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΥΤΕ είναι ή χρήση λειτουργικού συστήματος Linux, και οι ακόλουθες οδηγίες είναι βασισμένες σε λειτουργικό σύστημα Debian 10.
 
 Προτείνεται ισχυρά η εγκατάσταση πακέτων συστήματος από το λειτουργικό σύστημα, καθώς το μη "πακεταρισμένο" λογισμικό έχει σημαντικά μεγαλύτερο κόστος συντήρησης.
+
 
 ## Προετοιμασία συστήματος
 
@@ -367,7 +371,7 @@ date -R
 ```
 dpkg-reconfigure tzdata
 ```
-## Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war
+# Εγκατάσταση Shibboleth Identity Provider - Δημιουργία του Shibboleth idp.war
 
 Κατεβάστε το αρχείο εγκατάστασης καθώς και το αρχείο με το sha256 hash του αρχείου εγκατάστασης από το https://shibboleth.net/downloads/identity-provider/latest/
 
@@ -993,6 +997,86 @@ list of possible components and their options.
  -->
 </AttributeResolver>
 ```
+## Παραμετροποίηση απελευθέρωσης Attributes
+
+Η παραμετροποίηση της απελευθέρωσης attributes γίνεται στο αρχείο 
+```
+/opt/shibboleth-idp/conf/attribute-filter.xml
+```
+με την μορφή AttributeFilterPolicy elements , όπου ορίζεται ποια attributes επιτρέπεται ή απαγορεύεται να απελευθερώνει ο Identity Provider σε
+συγκεκριμένους Service Providers ή ομάδες Service Providers. 
+Η παραμετροποίηση αυτή είναι καθαρά ευθύνη του διαχειριστή του κάθε Identity Provider και εξαρτάται από την Πολιτική Ασφαλείας του κάθε
+Ιδρύματος. 
+Οι προτάσεις της Δ.Ο. της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΥΤΕ είναι: 
+- Να λάβετε υπ'όψιν την ανάγκη προστασίας της ιδιωτικότητας των χρηστών σας
+- Να λάβετε υπ'όψιν την ανάγκη των χρηστών σας να έχουν πρόσβαση σε υπηρεσίες που τους είναι απαραίτητες για να επιτελέσουν το
+ακαδημαϊκό ή ερευνητικό τους έργο.
+- Να ενεργοποιήσετε την λειτουργία User Consent για να είναι οι χρήστες σας οι τελικοί υπεύθυνοι για το αν θα επιτρέψουν την
+απελευθέρωση των attributes τους προς οποιονδήποτε Service Provider. 
+
+Oι Service Providers που λειτουργεί και διαχειρίζεται το ΕΔΥΤΕ, ανήκουν σε ένα EntityGroup μέσα στα Metadata της Ομοσπονδίας ΔΗΛΟΣ του
+ΕΔΥΤΕ με GroupID *http://aai.grnet.gr/entities/grnet/* ώστε να μπορείτε να ρυθμίσετε παρόμοιες πολιτικές απελευθέρωσης για όλους 
+Ακόμα, για κάθε υπηρεσία, τα attributes τα οποία είναι απαραίτητα για κάθε υπηρεσία, περιέχονται στα metadata κάθε υπηρεσίας μεσα στο
+metadata aggregate της Ομοσπονδίας ΔΗΛΟΣ του ΕΔΥΤΕ. 
+
+Για παράδειγμα η Υπηρεσία e:Presence με SAML EntityID το *https:/new.epresence.grnet.gr/shibboleth*, περιέχει στα metadata της το ακόλουθο: 
+```
+ <md:RequestedAttribute FriendlyName="givenName" Name="urn:oid:2.5.4.42" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/>
+ <md:RequestedAttribute FriendlyName="sn" Name="urn:oid:2.5.4.4" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/>
+ <md:RequestedAttribute FriendlyName="mail" Name="urn:oid:0.9.2342.19200300.100.1.3" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+ <md:RequestedAttribute FriendlyName="telephoneNumber" Name="urn:oid:2.5.4.20" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
+ <md:RequestedAttribute FriendlyName="schacHomeOrganization" Name="urn:oid:1.3.6.1.4.1.25178.1.2.9" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="true"/>
+```
+To οποίο δηλώνει ότι η υπηρεσία για να λειτουργήσει, χρειάζεται από τον Identity Provider να απελευθερώσει για τον χρήστη τα 
+```
+givenName (όνομα)
+sn (επώνυμο)
+schacHomeOrganization
+```
+Ενώ επιθυμητά (αν και όχι αναγκαία) είναι και τα 
+```
+mail
+telephoneNumber 
+```
+Μια τέτοια πολιτική θα μπορούσε να αποδοθεί στο ακόλουθο Attribute Filter Policy 
+```
+<AttributeFilterPolicy id="epresence">
+  <PolicyRequirementRule xsi:type="Requester" value="https://new.epresence.grnet.gr/shibboleth" />
+    <AttributeRule attributeID="email">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+    <AttributeRule attributeID="telephoneNumber">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+    <AttributeRule attributeID="schacHomeOrganization">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+    <AttributeRule attributeID="givenName">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+    <AttributeRule attributeID="surname">
+      <PermitValueRule xsi:type="ANY" />
+    </AttributeRule>
+</AttributeFilterPolicy>
+```
+Σας δίνουμε και ένα παράδειγμα με προϋπόθεσης απελευθέρωσης αν ικανοποιείται κάποιο κριτήριο
+```xml
+<AttributeFilterPolicy id = "ESItoSelectedServices">
+    <PolicyRequirementRule xsi:type="AND">
+        <Rule xsi:type="OR">
+            <Rule xsi:type="Requester" value="https://jtestservice/shibboleth" />
+        </Rule>
+        <!-- Αν είναι φοιτητής απελευθέρωσε το attribute -->
+        <Rule xsi:type="Value" attributeID="eduPersonEntitlement" value="member" />
+    </PolicyRequirementRule>
+    <AttributeRule attributeID="schacPersonalUniqueCode">
+    <!--πάρε το παραπάνω attribute από το IdM και πρόσθεσε κάποιο πρόθεμα πριν την απελευθέρωσή του-->
+        <PermitValueRule xsi:type="ValueRegex" regex="^urn:schac:personalUniqueCode:int:esi:.*$" />
+    </AttributeRule>
+</AttributeFilterPolicy>
+```
+
+
 # Παραμετροποίηση Βάσης
 
 ## Εγκατάσταση βάσης δεδομένων
@@ -1252,4 +1336,24 @@ idp.consent.compareValues  = true
 Στην συνέχεια Επανεκκινήστε το Tomcat.
 ```
 root@idp:/opt/shibboleth-idp# systemctl restart tomcat9
+```
+
+# Παραμετροποίηση Single Log Out
+
+Για την ενρεγοποίηση του single log out (SLO), η απαιτούμενη παραμετροποίηση στο αρχείο *conf/idp.properties* είναι η ακόλουθη:
+```
+- idp.session.trackSPSessions = true
+
+- idp.logout.elaboration = true
+
+- idp.session.secondaryServiceIndex = true
+```
+# Παραμετροποίηση Λογότυπου φορέα
+Μεταφορτώστε το λογότυπό σας (max. 240x180px) και τοποθετήστε το στο  
+```
+/opt/shibboleth-idp/edit-webapp/images/logo.png.
+```
+Δημιουργήστε και πάλι το IdP WAR (παρακολουθήστε τα αρχεία καταγραφών!):
+```
+root@idp:~# JAVA_HOME = /usr/opt/shibboleth-idp/bin/build.sh
 ```
