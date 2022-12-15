@@ -1353,6 +1353,18 @@ root@idp:/opt/shibboleth-idp# systemctl restart tomcat9
 ```
 /opt/shibboleth-idp/edit-webapp/images/logo.png.
 ```
+Προσαρμόστε ανάλογα με το όνομα του αρχείου σας τα layouts που φαίνονται παρακάτω
+```
+root@idp:/opt/shibboleth-idp# grep -rl "placeholder-logo.png" views/
+views/login.vm
+views/logout-propagate.vm
+views/error.vm
+views/user-prefs.vm
+views/admin/hello.vm
+views/logout-complete.vm
+views/logout.vm
+```
+
 Δημιουργήστε και πάλι το IdP WAR (παρακολουθήστε τα αρχεία καταγραφών!):
 ```
 root@idp:~# JAVA_HOME = /usr/opt/shibboleth-idp/bin/build.sh
